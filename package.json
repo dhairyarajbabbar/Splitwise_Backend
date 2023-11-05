@@ -1,0 +1,20 @@
+{
+  "name": "splitwise",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "http": "^0.0.1-security",
+    "mongoosh": "^0.0.7",
+    "node": "^20.5.1",
+    "nodemon": "^3.0.1",
+    "url": "^0.11.1"
+  }
+}
