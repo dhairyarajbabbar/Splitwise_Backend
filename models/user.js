@@ -10,6 +10,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  password:{
+    type: String,
+    required:true,
+  },
   friends: [{
     user: {
       type: mongoose.Schema.Types.ObjectId,

@@ -5,7 +5,7 @@ const router = express.Router();
 const {handleAddExpense, handelGetExpense} = require("../controller/grpExpense");
 
 router
-  .route("/:id")
+  .route("/")
   .get(handelGetExpense)
   .post(handleAddExpense)
   // .delete();

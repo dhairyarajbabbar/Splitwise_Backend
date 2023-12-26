@@ -45,9 +45,12 @@ const User = require("../models/user");
 async function handleMakeGroup(req, res) {
   try {
     const body = req.body;
-    let userEmails = req.query.memberdata;
-    const groupName = req.query.name;
+    // let userEmails = req.query.memberdata;
+    let userEmails = req.body.memberData;
+    const groupName = req.body.name;
+    // const groupName = req.query.name;
     // userEmails = [userEmails];
+    console.log(req.body);
     console.log(groupName);
     console.log(userEmails);
     if (!groupName) {
