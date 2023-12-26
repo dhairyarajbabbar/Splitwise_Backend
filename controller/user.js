@@ -1,9 +1,13 @@
-const express = require("express");
+// const express = require("express");
 const User = require("../models/user");
 const Group = require("../models/group");
 
 async function handelGetAllUsers(req, res) {
   const alldbUsers = await User.find({});
+  return res.json(alldbUsers);
+}
+async function handelloginUser(req, res) {
+  const alldbUsers = await User.findOne(req.body.email, req.password);
   return res.json(alldbUsers);
 }
 
@@ -35,10 +39,18 @@ async function handelGetAllUsers(req, res) {
 // }
 async function handelAddFriend(req, res) {
     const body = req.body;
-    const friendId = body.friendId;
-    const myId = body.myId;
-  
+    const friendEmail = body.friendemail;
+    const myEmail = body.myemail;
+    console.log(friendEmail, myEmail);
     try {
+      const friendUser = await User.findOne({ email: friendEmail });
+      const myUser = await User.findOne({ email: myEmail });
+      if (!friendUser || !myUser) {
+        return res.status(404).json({ msg: "User not found" });
+      } 
+      const friendId = friendUser._id;
+      const myId = myUser._id;
+
       const friresult = await User.findByIdAndUpdate(
         friendId,{
           $push: {
@@ -59,34 +71,34 @@ async function handelAddFriend(req, res) {
           },
         },{ new: true } 
       );
-  
-      console.log(friresult);
-      console.log(myresult);
-  
+
       return res.json({ msg: "Friend added", friresult, myresult });
     } catch (error) {
-      console.error("Error adding friend:", error);
+      // console.error("Error adding friend:", error);
       return res.status(500).json({ msg: "An error occurred while adding the friend" });
     }
   }
   
+  //   const body = req.body;
+  //   if (!body || !body.name || !body.email) {
+  //     return res.status(400).json({ msg: "all fields required" });
+  //   }
+  //   const result = await User.create({
+  //     name: body.name,
+  //     email: body.email,
+  //     friends: {},
+  //   });
+  //   console.log({ result });
+  //   return res.json({ msg: "user created", result });
 async function handelAddUser(req, res) {
-//   const body = req.body;
-//   if (!body || !body.name || !body.email) {
-//     return res.status(400).json({ msg: "all fields required" });
-//   }
-//   const result = await User.create({
-//     name: body.name,
-//     email: body.email,
-//     friends: {},
-//   });
-//   console.log({ result });
-//   return res.json({ msg: "user created", result });
 try {
     const userData=req.body;
+    console.log(req);
+    if(!(userData.name) || !(userData.email) || !(userData.password)) {
+      return res.status(410).json({ msg: "all fields required" , userData});
+    }
     const newUser = new User(userData);
     await newUser.save();
-
     return res.json({msg:"user created", newUser});
   } catch (error) {
     console.error('Error creating user:', error);
@@ -201,6 +213,7 @@ async function handelDeleteFriend(req, res) {
   }
 
 module.exports = {
+  handelloginUser,
   handelGetAllUsers,
   handelAddUser,
   handelAddFriend,
