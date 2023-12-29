@@ -19,7 +19,7 @@ async function handelloginUser(req, res) {
   }
   // const token = jwt.sign( {email:user.email, _id:user._id}, secretKey);
   const token = jwt.sign( {email: user.email, _id: user._id,}, secretKey);
-  res.cookie('token', token, { sameSite: 'None', secure: true });
+  res.cookie('token', token, { sameSite: 'None'});
   res.json({token});
 }
 async function handelAddFriend(req, res) {
