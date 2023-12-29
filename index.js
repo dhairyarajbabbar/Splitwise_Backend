@@ -21,7 +21,7 @@ app.use(cookieParser());
 const port=process.env.port || 4000;
 const corsOptions = {
     origin: `${process.env.frontend}`, // Replace with the actual origin of your frontend
-    methods: 'POST',
+    methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
     credentials: true,
     optionsSuccessStatus: 204,
 };
