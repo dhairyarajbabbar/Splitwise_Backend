@@ -27,7 +27,6 @@ const corsOptions = {
 };
 // Use cors middleware with options
 app.use(cors(corsOptions));
-
 app.get("/", (req, res)=>{
     res.send("<h1>finally Working Fine</h1>");
 });
