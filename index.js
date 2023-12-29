@@ -36,8 +36,28 @@ const port=process.env.port || 4000;
 //   });
 // // Use cors middleware with options
 // app.use(cors(corsOptions));
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', '*');
+//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//     res.header('Access-Control-Allow-Credentials', 'true');
+
+//     if (req.method === 'OPTIONS') {
+//         // Pre-flight request, respond successfully
+//         res.sendStatus(204);
+//     } else {
+//         next();
+//     }
+// });
+// Add this middleware before your routes
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
+    const allowedOrigins = ['http://localhost:3000', /* Add other allowed origins as needed */];
+    const origin = req.headers.origin;
+
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.header('Access-Control-Allow-Credentials', 'true');
@@ -49,6 +69,7 @@ app.use((req, res, next) => {
         next();
     }
 });
+
 app.get("/", (req, res)=>{
     res.send("<h1>finally Working Fine</h1>");
 });
