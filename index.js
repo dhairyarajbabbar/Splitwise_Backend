@@ -29,7 +29,7 @@ const corsOptions = {
 // app.use(cors(corsOptions));
 function hello(req, res){
     const ret=hello;
-    return ret.json();
+    return res.json(ret);
 }
 app.get("/", hello);
 app.use("/api/user", restricttologgedinusersonly, userRouter);
