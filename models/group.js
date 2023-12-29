@@ -22,6 +22,29 @@ const GroupSchema = new mongoose.Schema({
             },
         },],
     }], 
+    activity:[{
+      description:{
+        type:String,
+        required:true,
+      },
+      amount:{
+        type:Number,
+        required:true,
+      },
+      membersInvolved: [{
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User', // Reference to the 'User' model
+          required: true,
+        },
+      }],
+      payer:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required:true,
+      },
+
+    }],
 })
 const Group=mongoose.model("Group", GroupSchema);
 module.exports=Group;
