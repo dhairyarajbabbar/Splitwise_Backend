@@ -31,11 +31,15 @@ function hello(req, res){
     const ret=hello;
     return res.json(ret);
 }
-app.get("/", hello);
+app.get("/", (req, res)=>{
+    res.send("<h1>finally Working Fine</h1>");
+});
 app.use("/api/user", restricttologgedinusersonly, userRouter);
 app.use("/api/group", restricttologgedinusersonly, groupRouter);
 app.use("/api/groupexpense", restricttologgedinusersonly, grpExpenseRouter);
 app.post("/api/signup", handelAddUser);
 app.post("/api/login", handelloginUser);
 
-app.listen(port);
+app.listen(port, ()=>{
+    console.log("server is running on port", {port});
+});
