@@ -18,7 +18,7 @@ connectToMongoDb();
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-const port=process.env.port || 3000;
+const port=process.env.port || 4000;
 const corsOptions = {
     origin: `http://localhost:${port}`, // Replace with the actual origin of your frontend
     methods: 'POST',
