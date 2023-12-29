@@ -1,47 +1,34 @@
 // const express = require("express");
 const User = require("../models/user");
 const Group = require("../models/group");
+const jwt = require('jsonwebtoken');
 
 async function handelGetAllUsers(req, res) {
   const alldbUsers = await User.find({});
   return res.json(alldbUsers);
 }
 async function handelloginUser(req, res) {
-  const alldbUsers = await User.findOne(req.body.email, req.password);
-  return res.json(alldbUsers);
+  const secretKey='itsmysecretkey';
+  const { password } = req.body;
+  const user = await User.findOne({email : req.body.email});
+  // console.log(req.body.email);
+  // console.log(req.body.password);
+  // console.log(user);
+  if (!user || !(user.password === password)){
+    return res.redirect("/login");
+  }
+  // const token = jwt.sign( {email:user.email, _id:user._id}, secretKey);
+  const token = jwt.sign( {email: user.email, _id: user._id,}, secretKey);
+  res.cookie('token', token);
+  res.json({token});
 }
-
-
-// async function handelAddFriend(req, res) {
-//   const body = req.body;
-//   const friendId = body.friendId;
-//   const myId = body.myId;
-
-//   const friresult = await User.findByIdAndUpdate(
-//     { _id: friendId },
-//     {
-//       $set: {
-//         [`friends.${myId}`]: "0",
-//       },
-//     }
-//   );
-//   const myresult = await User.findByIdAndUpdate(
-//     { _id: myId },
-//     {
-//       $set: {
-//         [`friends.${friendId}`]: "0",
-//       },
-//     }
-//   );
-//   console.log(friresult);
-//   console.log(myresult);
-//   return res.json({ msg: "friend added", friresult, myresult });
-// }
 async function handelAddFriend(req, res) {
+  console.log("hello from handel add friend");
     const body = req.body;
     const friendEmail = body.friendemail;
-    const myEmail = body.myemail;
-    console.log(friendEmail, myEmail);
+    // const myEmail = body.myemail;
+    const myEmail=req.user.email;
+    // console.log(friendEmail, myEmail);
     try {
       const friendUser = await User.findOne({ email: friendEmail });
       const myUser = await User.findOne({ email: myEmail });
@@ -78,22 +65,10 @@ async function handelAddFriend(req, res) {
       return res.status(500).json({ msg: "An error occurred while adding the friend" });
     }
   }
-  
-  //   const body = req.body;
-  //   if (!body || !body.name || !body.email) {
-  //     return res.status(400).json({ msg: "all fields required" });
-  //   }
-  //   const result = await User.create({
-  //     name: body.name,
-  //     email: body.email,
-  //     friends: {},
-  //   });
-  //   console.log({ result });
-  //   return res.json({ msg: "user created", result });
 async function handelAddUser(req, res) {
 try {
     const userData=req.body;
-    console.log(req);
+    // console.log(req);
     if(!(userData.name) || !(userData.email) || !(userData.password)) {
       return res.status(410).json({ msg: "all fields required" , userData});
     }
@@ -105,15 +80,6 @@ try {
     throw error;
   }
 }
-
-
-// async function handelGetFriends(req, res) {
-//   const myId = req.query.myId;
-//   const myfriends = await User.findById(myId).select("friends");
-//   // console.log(myfriends);
-//   return res.json({ msg: "friend list is below", myfriends });
-// }
-// Function to get user details by _id
 ///////////////////////////////////////////////////////////////////////////////////
 async function getUserDetails(userId) {
   try {
@@ -129,7 +95,9 @@ async function getUserDetails(userId) {
 }
 // Function to get friends with their names
 async function handelGetFriends(req, res) {
-  const myId = req.query.myId;
+  const myEmail=req.user.email;
+  const me=await User.findOne({email:myEmail});
+  const myId = me._id;
   try {
     const myfriends = await User.findById(myId).select("friends");
     // Fetch details for each friend
@@ -146,14 +114,6 @@ async function handelGetFriends(req, res) {
   }
 }
 
-// async function handleGetAllGroups(req, res) {
-//   console.log("hello");
-//   const myId = req.query.myId;
-//   const mygroups = await User.findById(myId).select("groups");
-//   console.log(mygroups);
-//   return res.json({ msg: "group list is below", mygroups });
-// } 
-// Function to get group details by _id
 ///////////////////////////////////////////////////////////////////////////
 async function getGroupDetails(groupId) {
   try {
@@ -167,12 +127,13 @@ async function getGroupDetails(groupId) {
   } catch (error) {
     console.error(error);
     return null;
-    return { error: 'Internal Server Error 1' };
   }
 }
 // Function to get all groups with their names
 async function handleGetAllGroups(req, res) {
-  const myId = req.query.myId;
+  const myEmail=req.user.email;
+  const me=await User.findOne({email:myEmail});
+  const myId = me._id;
   try {
     const user = await User.findById(myId).select("groups");
     // console.log(user);
@@ -192,7 +153,9 @@ async function handleGetAllGroups(req, res) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 async function handelDeleteFriend(req, res) {
     const body = req.body;
-    const myId = body.myId;
+    const myEmail=req.user.email;
+    const me=await User.findOne({email:myEmail});
+    const myId = me._id;
     const friendId = body.friendId;
     try {
       await User.findByIdAndUpdate(

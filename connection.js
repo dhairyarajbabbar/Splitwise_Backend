@@ -1,11 +1,8 @@
 const mongoose=require("mongoose");
-// async function connectToMongoDb() {
-//     return mongoose.connect("mongodb://127.0.0.1:27017/splitwise_db").then ( () => {
-//         console.log("mongodb connected");
-//     });
-// };
+// const url="mongodb+srv://dhairyarajbabbar:dJsTd7ByyyOp8UQo@cluster0.pe4gl9r.mongodb.net/?retryWrites=true&w=majority"
+const url="mongodb://127.0.0.1:27017/splitwise_db";
 const connectToMongoDb=(async ()=>{
-    return mongoose.connect("mongodb://127.0.0.1:27017/splitwise_db").then ( () => {
+    return mongoose.connect(url).then ( () => {
         console.log("mongodb connected");
     });
 })

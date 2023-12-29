@@ -7,52 +7,15 @@ const User = require("../models/user");
 //     return res.json(alldbGroups);
 // }
 
-// async function handleMakeGroup(req, res) {
-//     try {
-//       const body = req.body;
-//       // const groupName = body.groupName;
-//       // const userIds = body.userIds;
-//       const userIds = req.query.memberdata;
-//       const groupName = req.query.name;
-//       console.log(req.query);
-//       console.log(req.body);
-//       if (!groupName) {
-//         return res.status(400).json({ msg: "Group name is required" });
-//       }
-//       const newGroup = new Group({ name: groupName, members:[] });
-//       for (const userId of userIds) {
-//         const user = await User.findById(userId);
-//         if (!user) {
-//           console.log(user);
-//           continue;
-//           // return res.status(404).json({ msg: `User with _id ${userId} not found` });
-//         }
-//         newGroup.members.push({
-//           user: userId,
-//           toUsers: [],
-//         });
-//         user.groups.push(newGroup._id);
-//         await user.save();
-//       }
-//       console.log()
-//       await newGroup.save();
-//       return res.json({ msg: "Group created with users", newGroup });
-//     } catch (error) {
-//       console.error("Error creating group:", error);
-//       return res.status(500).json({ msg: "An error occurred while creating the group" });
-//     }
-// }
 async function handleMakeGroup(req, res) {
   try {
     const body = req.body;
     // let userEmails = req.query.memberdata;
     let userEmails = req.body.memberData;
     const groupName = req.body.name;
-    // const groupName = req.query.name;
-    // userEmails = [userEmails];
-    console.log(req.body);
-    console.log(groupName);
-    console.log(userEmails);
+    // console.log(req.body);
+    // console.log(groupName);
+    // console.log(userEmails);
     if (!groupName) {
       return res.status(400).json({ msg: "Group name is required" });
     }
@@ -86,7 +49,6 @@ async function handleDeleteGroup(req, res) {
     try {
       const groupId = req.query.groupId;
       const group = await Group.findById(groupId);
-      console.log({groupId, group});
       if (!group) {
         return res.status(404).json({ msg: "Group not found" });
       }
@@ -104,29 +66,6 @@ async function handleDeleteGroup(req, res) {
       return res.status(500).json({ msg: "An error occurred while deleting the group" , error});
     }
 }
-// async function handleGetGroupUsers(req, res) {
-//   try {
-//     const groupId = req.params.id; // Extract groupId from the route parameters
-//     // console.log(req.params);
-//     if (!groupId) {  //if no groupid passed
-//       return res.status(400).json({ msg: "Group ID is required" });
-//     }
-//     const group = await Group.findById(groupId);
-    
-//     if (!group) {    // if group not found
-//       return res.status(404).json({ msg: "Group not found" });
-//     }
-    
-//     return res.json({ msg: "Group details retrieved", group });
-//     // const userIds = group.members.map((member) => member.user);
-//     // const users = await User.find({ _id: { $in: userIds } });
-
-//     // return res.json({ msg: "Group users retrieved", users });
-//   } catch (error) {
-//     console.error("Error retrieving group users:", error);
-//     return res.status(500).json({ msg: "An error occurred while retrieving group users" });
-//   }
-// }
 ////////////////////////////////////////////////////////////////
 async function getUserDetails(userId) {
   try {
@@ -172,12 +111,11 @@ async function handleGetGroupUsers(req, res) {
   
 async function handleAddUserToGroup(req, res) {
   try {
-    const groupId = req.params.id; // Extract the group ID from the route parameter
+    const groupId = req.query.id; // Extract the group ID from the route parameter
     const userId = req.body.userId; // Extract the user ID from the request body
     if (!groupId || !userId) {
       return res.status(400).json({ msg: "Group ID and user ID are required" });
     }
-
     const group = await Group.findById(groupId);
     const user = await User.findById(userId);
     if (!group) {
