@@ -11,14 +11,10 @@ async function restricttologgedinusersonly(req, res, next) {
         return res.redirect("/login");
     }
     const useruid = req.cookies.accessToken;
-    // console.log(req.query);
-    
     const user = await getUser(useruid);
-    // console.log(user);
     if(!user){
         return res.redirect("/login");
     }
-
     req.user = user;
     next();
 }
