@@ -1,9 +1,7 @@
 {
     "version": 2,
-    "name": "music-album",
-    "builds": [
-       { "src": "app.js", "use": "@vercel/node" }
-    ],
+    "name": "splitwise backend",
+   
     "routes": [
        { "src": "/(.*)", "dest": "/app.js" }
     ]
