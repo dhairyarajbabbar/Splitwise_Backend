@@ -26,7 +26,7 @@ const corsOptions = {
     optionsSuccessStatus: 204,
 };
 // Use cors middleware with options
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 app.use("/api/user", restricttologgedinusersonly, userRouter);
 app.use("/api/group", restricttologgedinusersonly, groupRouter);
 app.use("/api/groupexpense", restricttologgedinusersonly, grpExpenseRouter);
