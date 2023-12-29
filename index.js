@@ -27,6 +27,11 @@ const corsOptions = {
 };
 // Use cors middleware with options
 // app.use(cors(corsOptions));
+function hello(req, res){
+    const ret=hello;
+    return ret.json();
+}
+app.get("/", hello);
 app.use("/api/user", restricttologgedinusersonly, userRouter);
 app.use("/api/group", restricttologgedinusersonly, groupRouter);
 app.use("/api/groupexpense", restricttologgedinusersonly, grpExpenseRouter);
