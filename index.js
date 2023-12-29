@@ -20,13 +20,13 @@ app.use(cookieParser());
 
 const port=process.env.port || 4000;
 const corsOptions = {
-    origin: `http://localhost:${port}`, // Replace with the actual origin of your frontend
+    origin: `${process.env.frontend}`, // Replace with the actual origin of your frontend
     methods: 'POST',
     credentials: true,
     optionsSuccessStatus: 204,
 };
 // Use cors middleware with options
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 function hello(req, res){
     const ret=hello;
     return res.json(ret);
