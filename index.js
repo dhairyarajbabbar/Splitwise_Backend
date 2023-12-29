@@ -18,19 +18,19 @@ connectToMongoDb();
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-
+const port=process.env.port || 3000;
 const corsOptions = {
-    origin: 'http://localhost:3000', // Replace with the actual origin of your frontend
+    origin: `http://localhost:${port}`, // Replace with the actual origin of your frontend
     methods: 'POST',
     credentials: true,
     optionsSuccessStatus: 204,
 };
 // Use cors middleware with options
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 app.use("/api/user", restricttologgedinusersonly, userRouter);
 app.use("/api/group", restricttologgedinusersonly, groupRouter);
 app.use("/api/groupexpense", restricttologgedinusersonly, grpExpenseRouter);
 app.post("/api/signup", handelAddUser);
 app.post("/api/login", handelloginUser);
 
-app.listen(4000);
+app.listen(port);
