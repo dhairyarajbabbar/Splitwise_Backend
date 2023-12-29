@@ -11,9 +11,12 @@ async function handleMakeGroup(req, res) {
   try {
     const body = req.body;
     // let userEmails = req.query.memberdata;
+    const myEmail = req.user.email;
     let userEmails = req.body.memberData;
+    userEmails.push(myEmail);
     const groupName = req.body.name;
-    // console.log(req.body);
+    console.log(req.body);
+    console.log(myEmail);
     // console.log(groupName);
     // console.log(userEmails);
     if (!groupName) {
@@ -38,7 +41,8 @@ async function handleMakeGroup(req, res) {
       await user.save();
     }
     await newGroup.save();
-    return res.json({ msg: "Group created with users", newGroup });
+    console.log("hi", newGroup);
+    return res.status(200).json({ msg: "Group created with users", newGroup });
   } catch (error) {
     console.error("Error creating group:", error);
     return res.status(500).json({ msg: "An error occurred while creating the group" });

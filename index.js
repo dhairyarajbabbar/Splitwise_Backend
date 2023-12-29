@@ -8,6 +8,7 @@ const groupRouter = require("./routes/group");
 const grpExpenseRouter = require("./routes/grpExpense");
 const { handelAddUser, handelloginUser } = require("./controller/user");
 const {restricttologgedinusersonly} =require("./middlewares/auth");
+require('dotenv').config();
 
 mongoose.set("strictQuery", true);
 const app = express();
