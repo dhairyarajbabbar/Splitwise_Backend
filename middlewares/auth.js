@@ -7,14 +7,16 @@ async function getUser(token) {
 }
 
 async function restricttologgedinusersonly(req, res, next) {
+    console.log(req.headers);
     console.log(req.cookies);
     if (!req.cookies || !req.cookies.accessToken) {
         // Send an error response instead of redirecting
-        // console.log(req.headers.cookies);
+        console.log(req.headers.cookies);
         return res.status(401).json({ error: 'Unauthorized - Access Token missing' });
     }
 
     const useruid = req.cookies.accessToken;
+    console.log(useruid);
     const user = await getUser(useruid);
     if (!user) {
         // Send an error response instead of redirecting
