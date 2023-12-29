@@ -1,7 +1,0 @@
-{
-    "version": 2,
-    "name": "splitwise backend",
-    "routes": [
-       { "src": "/(.*)", "dest": "/index.js" }
-    ]
- }

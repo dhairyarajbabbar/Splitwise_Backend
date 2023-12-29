@@ -19,52 +19,69 @@ async function handelloginUser(req, res) {
   }
   // const token = jwt.sign( {email:user.email, _id:user._id}, secretKey);
   const token = jwt.sign( {email: user.email, _id: user._id,}, secretKey);
-  res.cookie('token', token);
+  res.cookie('token', token, { sameSite: 'None', secure: true });
   res.json({token});
 }
 async function handelAddFriend(req, res) {
   console.log("hello from handel add friend");
-    const body = req.body;
-    const friendEmail = body.friendemail;
-    // const myEmail = body.myemail;
-    const myEmail=req.user.email;
-    // console.log(friendEmail, myEmail);
-    try {
-      const friendUser = await User.findOne({ email: friendEmail });
-      const myUser = await User.findOne({ email: myEmail });
-      if (!friendUser || !myUser) {
-        return res.status(404).json({ msg: "User not found" });
-      } 
-      const friendId = friendUser._id;
-      const myId = myUser._id;
+  const body = req.body;
+  const friendEmail = body.friendemail;
+  const myEmail = req.user.email;
 
-      const friresult = await User.findByIdAndUpdate(
-        friendId,{
-          $push: {
-            friends: {
-              user: myId,
-              amount: "0",
-            },
-          },
-        },{ new: true } 
-      );
-      const myresult = await User.findByIdAndUpdate(
-        myId,{
-          $push: {
-            friends: {
-              user: friendId,
-              amount: "0", 
-            },
-          },
-        },{ new: true } 
-      );
+  try {
+    const friendUser = await User.findOne({ email: friendEmail });
+    const myUser = await User.findOne({ email: myEmail });
 
-      return res.json({ msg: "Friend added", friresult, myresult });
-    } catch (error) {
-      // console.error("Error adding friend:", error);
-      return res.status(500).json({ msg: "An error occurred while adding the friend" });
+    if (!friendUser || !myUser) {
+      return res.status(404).json({ msg: "User not found" });
     }
+
+    const friendId = friendUser._id;
+    const myId = myUser._id;
+
+    // Check if the users are already friends
+    const areAlreadyFriends = myUser.friends.some(
+      (friend) => friend.user.toString() === friendId.toString()
+    );
+
+    if (areAlreadyFriends) {
+      return res.status(400).json({ msg: "Users are already friends" });
+    }
+
+    // Add friends only if they are not already friends
+    const friresult = await User.findByIdAndUpdate(
+      friendId,
+      {
+        $push: {
+          friends: {
+            user: myId,
+            amount: "0",
+          },
+        },
+      },
+      { new: true }
+    );
+
+    const myresult = await User.findByIdAndUpdate(
+      myId,
+      {
+        $push: {
+          friends: {
+            user: friendId,
+            amount: "0",
+          },
+        },
+      },
+      { new: true }
+    );
+
+    return res.json({ msg: "Friend added", friresult, myresult });
+  } catch (error) {
+    console.error("Error adding friend:", error);
+    return res.status(500).json({ msg: "An error occurred while adding the friend" });
   }
+}
+
 async function handelAddUser(req, res) {
 try {
     const userData=req.body;
