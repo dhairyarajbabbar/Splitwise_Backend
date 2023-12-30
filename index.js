@@ -51,7 +51,7 @@ app.use(cors(corsOptions));
 // });
 // Add this middleware before your routes
 app.use((req, res, next) => {
-    const allowedOrigins = ['https://splitkaro-da4103426-dhairyarajbabbar.vercel.app', /* Add other allowed origins as needed */];
+    const allowedOrigins = [`${process.env.frontend}`, /* Add other allowed origins as needed */];
     const origin = req.headers.origin;
 
     if (allowedOrigins.includes(origin)) {
