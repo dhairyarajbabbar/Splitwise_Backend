@@ -13,13 +13,12 @@ async function handelloginUser(req, res) {
   const user = await User.findOne({email : req.body.email});
   // console.log(req.body.email);
   // console.log(req.body.password);
-  // console.log(user);
+  console.log(user);
   if (!user || !(user.password === password)){
-    return res.redirect("/login");
+    return res.status(301).json("user not exist");
   }
-  // const token = jwt.sign( {email:user.email, _id:user._id}, secretKey);
   const token = jwt.sign( {email: user.email, _id: user._id,}, secretKey);
-  res.cookie('token', token, { sameSite: 'None'});
+  res.cookie('token', token, { sameSite: 'None', });
   res.json({token});
 }
 async function handelAddFriend(req, res) {

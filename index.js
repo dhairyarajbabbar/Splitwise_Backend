@@ -20,22 +20,22 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 const port=process.env.port || 4000;
-// const corsOptions = {
-//     origin: `${process.env.frontend}`, // Replace with the actual origin of your frontend
-//     methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-//     credentials: true,
-//     optionsSuccessStatus: 204,
-// };
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', `${process.env.frontend}`);
-//     // res.header('Access-Control-Allow-Credentials', 'true');
-//     // res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-//     res.header('Access-Control-Allow-Method', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+const corsOptions = {
+    origin: `${process.env.frontend}`, // Replace with the actual origin of your frontend
+    methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+    credentials: true,
+    optionsSuccessStatus: 204,
+};
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', `${process.env.frontend}`);
+    // res.header('Access-Control-Allow-Credentials', 'true');
+    // res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Method', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
-//     next();
-//   });
-// // Use cors middleware with options
-// app.use(cors(corsOptions));
+    next();
+  });
+// Use cors middleware with options
+app.use(cors(corsOptions));
 // app.use((req, res, next) => {
 //     res.header('Access-Control-Allow-Origin', '*');
 //     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
