@@ -7,8 +7,8 @@ async function getUser(token) {
 }
 
 async function restricttologgedinusersonly(req, res, next) {
-    console.log(req.headers);
-    console.log(req.cookies);
+    console.log("headers: ", req.headers);
+    console.log("cookies: ", req.cookies);
     if (!req.cookies || !req.cookies.accessToken) {
         // Send an error response instead of redirecting
         console.log(req.headers.cookies);
