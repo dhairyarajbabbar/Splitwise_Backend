@@ -35,7 +35,7 @@ app.use((req, res, next) => {
 app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
-    const allowedOrigins = ['http://localhost:3000', /* Add other allowed origins as needed */];
+    const allowedOrigins = [`${process.env.frontend}`, /* Add other allowed origins as needed */];
     const origin = req.headers.origin;
 
     if (allowedOrigins.includes(origin)) {
