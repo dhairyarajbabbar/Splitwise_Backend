@@ -5,7 +5,6 @@ async function getUser(token) {
     const mysecretkey = "itsmysecretkey";
     return jwt.verify(token, mysecretkey);
 }
-
 async function restricttologgedinusersonly(req, res, next) {
     console.log("headers: ", req.headers);
     console.log("cookies: ", req.cookies);
@@ -14,15 +13,12 @@ async function restricttologgedinusersonly(req, res, next) {
         console.log(req.headers.cookies);
         return res.status(401).json({ error: 'Unauthorized - Access Token missing' });
     }
-
     const useruid = req.cookies.accessToken;
     console.log(useruid);
     const user = await getUser(useruid);
     if (!user) {
-        // Send an error response instead of redirecting
         return res.status(401).json({ error: 'Unauthorized - Invalid Access Token' });
     }
-
     req.user = user;
     next();
 }

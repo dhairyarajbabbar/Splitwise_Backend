@@ -9,16 +9,13 @@ const grpExpenseRouter = require("./routes/grpExpense");
 const { handelAddUser, handelloginUser } = require("./controller/user");
 const {restricttologgedinusersonly} =require("./middlewares/auth");
 require('dotenv').config();
-
 mongoose.set("strictQuery", true);
 const app = express();
 // Enable CORS for all routes
 connectToMongoDb();
-
 // Middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
 const port=process.env.port || 4000;
 const corsOptions = {
     origin: `${process.env.frontend}`, // Replace with the actual origin of your frontend
@@ -36,20 +33,7 @@ app.use((req, res, next) => {
   });
 // Use cors middleware with options
 app.use(cors(corsOptions));
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-//     res.header('Access-Control-Allow-Credentials', 'true');
 
-//     if (req.method === 'OPTIONS') {
-//         // Pre-flight request, respond successfully
-//         res.sendStatus(204);
-//     } else {
-//         next();
-//     }
-// });
-// Add this middleware before your routes
 app.use((req, res, next) => {
     const allowedOrigins = ['http://localhost:3000', /* Add other allowed origins as needed */];
     const origin = req.headers.origin;
@@ -69,7 +53,6 @@ app.use((req, res, next) => {
         next();
     }
 });
-
 app.get("/", (req, res)=>{
     res.send("<h1>finally Working Fine</h1>");
 });

@@ -3,7 +3,6 @@ const User = require("../models/user");
 const router = express.Router();
 const {
   handelGetAllUsers,
-  handelloginUser,
   handelAddFriend,
   handelGetFriends,
   handelDeleteFriend,
@@ -11,7 +10,7 @@ const {
   handelAddUser,
 } = require("../controller/user");
 
-router.route("/").get(handelGetAllUsers).post(handelAddUser);
+router.route("/").get(handelGetAllUsers)
 router.route("/group").get(handleGetAllGroups);
 router
   .route("/friend")
